@@ -1,6 +1,6 @@
-# MQTT-Sim
-
 **Under Active Development**
+
+# MQTT-Sim
 
 MQTT-Sim is a simulator designed to periodically publish data to an MQTT broker, simulating multiple publishers and topics. It is useful for testing and developing MQTT-based systems by generating configurable, realistic MQTT traffic.
 
