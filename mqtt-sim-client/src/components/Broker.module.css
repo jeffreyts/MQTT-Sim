@@ -1,0 +1,18 @@
+.contentContainer {
+    align-items: center;
+    display: flex;
+    background-color: var(--bs-body-bg);
+    padding: 10px;
+    background-color: var(--bs-primary-bg-subtle);
+    font-weight: bold;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: var(--bs-primary-bg-subtle);
+}
+
+.item {
+    margin: 0px 10px 10px 10px;
+    width: 80%;
+}

@@ -1,0 +1,19 @@
+/* Only the topic list scrolls, not the whole page */
+.topic-list {
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-right: 8px; /* for scrollbar space */
+}
+
+/* Make TopicList fill available space and only it scrolls */
+.topicListOuter {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.topicListInner {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}

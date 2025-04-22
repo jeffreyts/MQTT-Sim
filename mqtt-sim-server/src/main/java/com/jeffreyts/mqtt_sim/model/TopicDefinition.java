@@ -1,0 +1,59 @@
+package com.jeffreyts.mqtt_sim.model;
+
+import com.hivemq.client.mqtt.datatypes.MqttQos;
+
+/// Defines a topic that will be published to and parameters
+public class TopicDefinition {
+    /// Topic Name
+    String name;
+
+    /// Maximum Value
+    int maximumValue;
+
+    /// Minimum Value
+    int minimumValue;
+
+    /// Publishing interval in milliseconds
+    int intervalMilliseconds;
+
+    /// QoS to use for publishing messages
+    MqttQos qualityOfService;
+
+   public String getName(){
+       return this.name;
+   }
+
+   public int getMaximumValue(){
+       return this.maximumValue;
+   }
+
+   public int getMinimumValue(){
+
+       return this.minimumValue;
+   }
+
+   public MqttQos getQualityOfService(){
+       return this.qualityOfService;
+   }
+
+   public int getIntervalMilliseconds(){
+       return this.intervalMilliseconds;
+   }
+
+   public void setName(String name) {
+       this.name = name;
+   }
+
+   public void setMaximumValue(int maximumValue){
+       this.maximumValue = maximumValue;
+   }
+
+   public void setMinimumValue(int minimumValue){
+       this.minimumValue = minimumValue;
+   }
+
+   public void setQualityOfService(MqttQos qualityOfService){
+       this.qualityOfService = qualityOfService;
+   }
+
+}
