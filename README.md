@@ -4,6 +4,17 @@
 
 MQTT-Sim is a simulator designed to periodically publish data to an MQTT broker, simulating multiple publishers and topics. It is useful for testing and developing MQTT-based systems by generating configurable, realistic MQTT traffic.
 
+# Simple To Use
+- Connect to a broker
+![image](https://github.com/user-attachments/assets/1abd7792-4270-45ad-8dd5-82ae04b626e3)
+- Add and Configure Topics to publish to
+![image](https://github.com/user-attachments/assets/bff7fafa-1794-4cb3-b31f-77062c849c2e)
+- Press the play button to begin publishing, pause to stop publishing
+- Toggle between dark and light mode
+![image](https://github.com/user-attachments/assets/039add3b-a068-43d2-b673-0cec813e7adb)
+
+
+
 ## Features
 
 - **Simulate Multiple Topics:** Define multiple topics, each with its own value range, interval, and QoS.
@@ -44,13 +55,6 @@ npm run dev
 ```
 
 The frontend will start on port 3000.
-
-### Usage
-
-1. Open the frontend at [http://localhost:3000](http://localhost:3000).
-2. Enter your MQTT broker URL and connect.
-3. Add topics, set their value ranges, intervals, and QoS.
-4. The simulator will begin publishing random values to the broker as configured.
 
 ## License
 
