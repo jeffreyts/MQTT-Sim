@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Broker.module.css";
-import { connectToBroker } from "../services/apiService";
+import { connectToBroker, disconnectBroker, getBrokerStatus } from "../services/apiService";
 import { BrokerStatus } from "../models/BrokerStatus";
 import { ConnectionStatus } from "../models/ConnectionStatus";
 
@@ -8,9 +8,29 @@ const Broker = () => {
     const [brokerUrl, setBrokerUrl] = useState<string>('');
     const [brokerStatus, setBroker] = useState<BrokerStatus>(new BrokerStatus());
 
+    useEffect(() => {
+            const getStatus = async () => {
+                const brokerStatus = await getBrokerStatus();
+                setBroker(brokerStatus);
+                setBrokerUrl(brokerStatus.host);
+            };
+            getStatus();
+        }, []);
+    
     const connect = async () => {
         try {
             const status = await connectToBroker({ host: brokerUrl });
+            setBroker(status);
+        }
+        catch (error) {
+            console.error("Error connecting to broker:", error);
+            setBroker(new BrokerStatus({ status: ConnectionStatus.Error, statusMessage: "Failed to connect" }));
+        }
+    };
+
+    const disconnect = async () => {
+        try {
+            const status = await disconnectBroker();
             setBroker(status);
         }
         catch (error) {
@@ -56,6 +76,7 @@ const Broker = () => {
                 readOnly
             />
             <button className={styles.item} type="submit">Connect</button>
+            <button className={styles.item} type="button" style={{ background: 'transparent', color: 'red', border: '1px solid red' }} onClick={disconnect}>Disconnect</button>
         </form>
     );
 }

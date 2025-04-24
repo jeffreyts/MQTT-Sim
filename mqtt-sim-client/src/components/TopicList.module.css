@@ -17,3 +17,39 @@
   overflow-y: auto;
   min-height: 0;
 }
+
+.topicButton {
+  margin: 10px 0px 10px 0px;
+  align-self: right;
+  padding: 0px 10px 0px 10px;
+}
+
+.playButton {
+  background: transparent;
+  border-color: #27ae60;
+}
+.playButton:hover {
+  background: #67b588;
+}
+
+.playButtonPublishing {
+  animation: flashColor 2s infinite;
+}
+
+.pauseButton {
+  background: transparent;
+  border-color: #e74c3c;
+}
+.pauseButton:hover {
+  background: #ec7062;
+}
+
+@keyframes flashColor {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #00ff00;
+  }
+}
+

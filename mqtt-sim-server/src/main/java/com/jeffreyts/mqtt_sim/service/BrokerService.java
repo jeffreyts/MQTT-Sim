@@ -11,7 +11,10 @@ public interface BrokerService {
     MQTTBrokerStatus disconnect();
     MQTTBrokerStatus getBrokerStatus();
     List<TopicDefinition> getTopics();
+    void pausePublishing();
+    void startPublishing();
     void addTopicSimulators(List<TopicDefinition> topicDefinitions);
     void addTopicSimulator(TopicDefinition topicDefinition);
     void removeTopicSimulator(TopicDefinition topicDefinition);
+    boolean getPublishingStatus();
 }

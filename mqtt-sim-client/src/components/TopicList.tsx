@@ -1,22 +1,32 @@
 import { useEffect, useState } from "react";
-import { getTopics, removeTopic, addOrUpdateTopic } from "../services/apiService";
+import { getTopics, removeTopic, addOrUpdateTopic, startPublishing, pausePublishing, getPublishingStatus } from "../services/apiService";
 import TopicDefinition from "../models/TopicDefinition";
 import Topic from "./Topic";
 import styles from "./TopicList.module.css";
+import playButton from '../assets/play-green.svg'
+import pauseButton from '../assets/pause-red.svg';
 
 const TopicList = () => {
     const [topics, setTopics] = useState<TopicDefinition[]>([]);
     const [loading, setLoading] = useState(true);
+    const [publishing, setPublishing] = useState(false);
 
     useEffect(() => {
-        // Replace with your actual API call
         const fetchTopics = async () => {
             const topics = await getTopics();
             setTopics(topics);
             setLoading(false);
         };
         fetchTopics();
-    }, []); // <-- empty array means "run once on mount"
+    }, []);
+
+    useEffect(() => {
+        const getPublishing = async () => {
+            const publishingStatus = await getPublishingStatus();
+            setPublishing(publishingStatus);
+        };
+        getPublishing();
+    }, []);
 
     const handleSave = (updatedTopic: TopicDefinition) => {
         const updateTopic = async () => {
@@ -48,12 +58,36 @@ const TopicList = () => {
         setTopics(topics => [newTopic, ...topics]);
     }
 
+    const startPublishingTopics = () => {
+        if (publishing) return; // Prevent starting if already publishing
+        const start = async () => {
+            await startPublishing();
+        }
+        start();
+        setPublishing(true);
+    }
+
+    const pausePublishingTopics = () => {
+        if (!publishing) return; // Prevent pausing if not publishing
+        const pause = async () => {
+            await pausePublishing();
+        }
+        pause();
+        setPublishing(false);
+    }
+
     if (loading) return <div>Loading...</div>;
 
     return (
         <div className={styles.topicListOuter}>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <button onClick={addTopic} style={{ margin:'10px 0px 10px 0px', alignSelf:'right'}}>Add</button>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                <button onClick={startPublishingTopics} className={`${styles.topicButton} ${publishing ? styles.playButtonPublishing : styles.playButton}`}>
+                    <img src={playButton} alt="Start Publishing"/>
+                </button>
+                <button onClick={pausePublishingTopics} className={`${styles.topicButton} ${styles.pauseButton}`}>
+                    <img src={pauseButton} alt="Pause Publishing"/>
+                </button>
+                <button onClick={addTopic} className={styles.topicButton}>Add</button>
             </div>
             <div className={styles.topicListInner}>
                 {topics.map(t => (

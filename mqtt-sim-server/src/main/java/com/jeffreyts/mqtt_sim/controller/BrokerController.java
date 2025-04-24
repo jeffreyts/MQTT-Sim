@@ -10,15 +10,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/broker")
+@RequestMapping("/api")
 public class BrokerController{
 
     @Autowired
     BrokerService brokerService;
 
-    @PostMapping("/add")
+    @PostMapping("/connectBroker")
     public MQTTBrokerStatus addBroker(@RequestBody MQTTBroker mqttBroker){
         return this.brokerService.connect(mqttBroker);
+    }
+
+    @PostMapping("/disconnectBroker")
+    public MQTTBrokerStatus disconnectBroker(){
+        return this.brokerService.disconnect();
+    }
+
+    @GetMapping("/brokerStatus")
+    public MQTTBrokerStatus getBrokerStatus(){
+        return this.brokerService.getBrokerStatus();
+    }
+
+    @GetMapping("/publishingStatus")
+    public boolean getPublishingStatus(){
+        return this.brokerService.getPublishingStatus();
     }
 
     @PostMapping("/topics")
@@ -27,7 +42,7 @@ public class BrokerController{
     }
 
     @PostMapping("/topics/update")
-    public void addTopics(@RequestBody TopicDefinition topicDefinition){
+    public void addTopic(@RequestBody TopicDefinition topicDefinition){
         this.brokerService.addTopicSimulator(topicDefinition);
     }
 
@@ -39,6 +54,16 @@ public class BrokerController{
     @PostMapping("/topics/remove")
     public void removeTopics(@RequestBody TopicDefinition topicDefinition){
         this.brokerService.removeTopicSimulator(topicDefinition);
+    }
+
+    @PostMapping("/topics/start")
+    public void startPublishing(){
+        this.brokerService.startPublishing();
+    }
+
+    @PostMapping("/topics/pause")
+    public void pausePublishing(){
+        this.brokerService.pausePublishing();
     }
 
     @GetMapping("/disconnect")
