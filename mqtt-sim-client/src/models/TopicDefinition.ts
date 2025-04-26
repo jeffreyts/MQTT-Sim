@@ -2,6 +2,9 @@
 import { MqttQos } from './MqttQos';
 
 export class TopicDefinition {
+    // Unique Identifier
+    uid: number = -1;
+
     // Topic Name
     name: string = '';
 

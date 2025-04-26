@@ -20,8 +20,8 @@ public class MQTTBrokerService implements BrokerService {
 
     Mqtt5RxClient currentClient;
     MQTTBrokerStatus brokerStatus = new MQTTBrokerStatus(ConnectionStatus.DISCONNECTED, "", LocalDateTime.now(), "");
-    Map<String, Disposable> topicToPublishingSubscriptionMap = new HashMap<String, Disposable>();
-    Map<String, TopicDefinition> topicToDefinitionMap = new HashMap<String, TopicDefinition>();
+    Map<Integer, Disposable> topicToPublishingSubscriptionMap = new HashMap<Integer, Disposable>();
+    Map<Integer, TopicDefinition> topicToDefinitionMap = new HashMap<Integer, TopicDefinition>();
     ArrayList<TopicDefinition> topics = new ArrayList<>();
     Boolean paused = true;
 
@@ -84,8 +84,8 @@ public class MQTTBrokerService implements BrokerService {
             return;
         }
 
-        for (String topic: this.topicToPublishingSubscriptionMap.keySet()){
-            this.topicToPublishingSubscriptionMap.get(topic).dispose();
+        for (Integer UID: this.topicToPublishingSubscriptionMap.keySet()){
+            this.topicToPublishingSubscriptionMap.get(UID).dispose();
         }
         this.topicToPublishingSubscriptionMap.clear();
         this.paused = true;
@@ -127,15 +127,32 @@ public class MQTTBrokerService implements BrokerService {
     @Override
     /// Adds a topic publisher
     public void addTopicSimulator(TopicDefinition topicDefinition) {
-        if (this.topicToDefinitionMap.containsKey(topicDefinition.getName())){
+        if (this.topicToDefinitionMap.containsKey(topicDefinition.getUID())){
+            if (!this.paused && this.topicToPublishingSubscriptionMap.containsKey(topicDefinition.getUID())){
+                this.topicToPublishingSubscriptionMap.get(topicDefinition.getUID()).dispose();
+                this.topicToPublishingSubscriptionMap.remove(topicDefinition.getUID());
+            }
+
+            this.topicToDefinitionMap.put(topicDefinition.getUID(), topicDefinition);
+
+            if (!this.paused){
+                startPublishingToTopic(topicDefinition);
+            }
             return;
+        } else if (topicDefinition.getUID() <= 0) {
+            int newUID = 0;
+            if (!topicToDefinitionMap.isEmpty()){
+                newUID = Collections.max(topicToDefinitionMap.keySet()) + 1;
+            }
+
+            topicDefinition.setUID(newUID);
+            this.topicToDefinitionMap.put(topicDefinition.getUID(), topicDefinition);
+
+            if (!this.paused){
+                startPublishingToTopic(topicDefinition);
+            }
         }
 
-        this.topicToDefinitionMap.put(topicDefinition.getName(), topicDefinition);
-
-        if (!this.paused){
-            startPublishingToTopic(topicDefinition);
-        }
     }
 
     @Override
@@ -147,17 +164,17 @@ public class MQTTBrokerService implements BrokerService {
     @Override
     /// Stops publishing to a topic if currently publishing
     public void removeTopicSimulator(TopicDefinition topicDefinition) {
-        if (this.topicToPublishingSubscriptionMap.containsKey(topicDefinition.getName())) {
+        if (this.topicToPublishingSubscriptionMap.containsKey(topicDefinition.getUID())) {
             try {
-                this.topicToPublishingSubscriptionMap.get(topicDefinition.getName()).dispose();
+                this.topicToPublishingSubscriptionMap.get(topicDefinition.getUID()).dispose();
             }
             catch (Exception exception){
                 //TODO: Log here that the topic was already disposed
             }
-            this.topicToPublishingSubscriptionMap.remove(topicDefinition.getName());
+            this.topicToPublishingSubscriptionMap.remove(topicDefinition.getUID());
         }
 
-        this.topicToDefinitionMap.remove(topicDefinition.getName());
+        this.topicToDefinitionMap.remove(topicDefinition.getUID());
     }
 
     /// Begins publishing to a topic
@@ -180,6 +197,6 @@ public class MQTTBrokerService implements BrokerService {
                 .ignoreElements()
                 .doOnError(throwable -> removeTopicSimulator(topicDefinition))
                 .subscribe();
-        this.topicToPublishingSubscriptionMap.put(topicDefinition.getName(), topicSimulatorSubscription);
+        this.topicToPublishingSubscriptionMap.put(topicDefinition.getUID(), topicSimulatorSubscription);
     }
 }

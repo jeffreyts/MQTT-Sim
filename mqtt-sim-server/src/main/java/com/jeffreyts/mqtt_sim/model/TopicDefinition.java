@@ -4,6 +4,10 @@ import com.hivemq.client.mqtt.datatypes.MqttQos;
 
 /// Defines a topic that will be published to and parameters
 public class TopicDefinition {
+
+    ///  Unique Identifier
+    Integer UID;
+
     /// Topic Name
     String name;
 
@@ -18,6 +22,10 @@ public class TopicDefinition {
 
     /// QoS to use for publishing messages
     MqttQos qualityOfService;
+
+   public Integer getUID(){
+        return this.UID;
+   }
 
    public String getName(){
        return this.name;
@@ -39,6 +47,8 @@ public class TopicDefinition {
    public int getIntervalMilliseconds(){
        return this.intervalMilliseconds;
    }
+
+   public void setUID(Integer UID) { this.UID = UID; }
 
    public void setName(String name) {
        this.name = name;
