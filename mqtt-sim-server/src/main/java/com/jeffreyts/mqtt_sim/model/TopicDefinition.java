@@ -66,4 +66,8 @@ public class TopicDefinition {
        this.qualityOfService = qualityOfService;
    }
 
+   public void setIntervalMilliseconds(int intervalMilliseconds){
+       this.intervalMilliseconds = intervalMilliseconds;
+   }
+
 }

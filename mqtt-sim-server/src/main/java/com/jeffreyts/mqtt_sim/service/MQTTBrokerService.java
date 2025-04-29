@@ -127,6 +127,10 @@ public class MQTTBrokerService implements BrokerService {
     @Override
     /// Adds a topic publisher
     public void addTopicSimulator(TopicDefinition topicDefinition) {
+        if (topicDefinition.getIntervalMilliseconds() < 50){
+            topicDefinition.setIntervalMilliseconds(50); //Limit the rate messages can be published
+        }
+
         if (this.topicToDefinitionMap.containsKey(topicDefinition.getUID())){
             if (!this.paused && this.topicToPublishingSubscriptionMap.containsKey(topicDefinition.getUID())){
                 this.topicToPublishingSubscriptionMap.get(topicDefinition.getUID()).dispose();

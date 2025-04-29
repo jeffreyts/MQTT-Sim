@@ -19,6 +19,10 @@ function Topic(props: { topic: TopicDefinition; onSave: (t: TopicDefinition) => 
 
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault();
+        if (topic.intervalMilliseconds < 50){
+            alert("Interval must be at least 50ms.");
+            return;
+        }
         props.onSave(topic);
         setIsExpanded(false);
     };
