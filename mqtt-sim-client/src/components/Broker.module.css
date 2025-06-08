@@ -11,8 +11,3 @@
     justify-content: flex-start;
     background-color: var(--bs-primary-bg-subtle);
 }
-
-.item {
-    margin: 0px 10px 10px 10px;
-    width: 80%;
-}

@@ -4,7 +4,7 @@ import { connectToBroker, disconnectBroker, getBrokerStatus } from "../services/
 import { BrokerStatus } from "../models/BrokerStatus";
 import { ConnectionStatus } from "../models/ConnectionStatus";
 
-const Broker = () => {
+export default function Broker() {
     const [brokerUrl, setBrokerUrl] = useState<string>('');
     const [brokerStatus, setBroker] = useState<BrokerStatus>(new BrokerStatus());
 
@@ -40,45 +40,61 @@ const Broker = () => {
     };
 
     return (
-        <form className={`row ${styles.contentContainer}`} onSubmit={e => { e.preventDefault(); connect(); }}>
-            <label htmlFor="broker-url" className={styles.item}>Broker URL:</label>
-            <input 
-                id="broker-url"
-                type="text" 
-                value={brokerUrl} 
-                className={styles.item}
-                placeholder="Broker URL" 
-                aria-label="Broker URL" 
-                onChange={(e) => setBrokerUrl(e.target.value)}
-            />
-            <label htmlFor="broker-status" className={styles.item}>Status:</label>
-            <input
-                id="broker-status"
-                type="text"
-                value={brokerStatus.status.toString()}
-                className={styles.item}
-                readOnly
-            />
-            <label htmlFor="broker-message" className={styles.item}>Message:</label>
-            <input
-                id="broker-message"
-                type="text"
-                value={brokerStatus.statusMessage}
-                className={styles.item}
-                readOnly
-            />
-            <label htmlFor="broker-last-status" className={styles.item}>Last Status:</label>
-            <input
-                id="broker-last-status"
-                type="text"
-                value={brokerStatus.statusTime ? `${brokerStatus.statusTime.getMonth()+1}/${brokerStatus.statusTime.getDate()}/${brokerStatus.statusTime.getFullYear()} ${brokerStatus.statusTime.getHours()}:${brokerStatus.statusTime.getMinutes()}:${brokerStatus.statusTime.getSeconds()}` : ''}
-                className={styles.item}
-                readOnly
-            />
-            <button className={styles.item} type="submit">Connect</button>
-            <button className={styles.item} type="button" style={{ background: 'transparent', color: 'red', border: '1px solid red' }} onClick={disconnect}>Disconnect</button>
+        <form className={`container-fluid`} onSubmit={e => { e.preventDefault(); connect(); }}>
+            <div className="row align-items-center mb-2">
+                <label htmlFor="broker-url" className="col-3 text-end">Broker URL:</label>
+                <div className="col-9">
+                    <input 
+                        id="broker-url"
+                        type="text" 
+                        value={brokerUrl} 
+                        className="form-control"
+                        placeholder="Broker URL" 
+                        aria-label="Broker URL" 
+                        onChange={(e) => setBrokerUrl(e.target.value)}
+                    />
+                </div>
+            </div>
+            <div className="row align-items-center mb-2">
+                <label htmlFor="broker-status" className="col-3 text-end">Status:</label>
+                <div className="col-9">
+                    <input
+                        id="broker-status"
+                        type="text"
+                        value={brokerStatus.status.toString()}
+                        className="form-control"
+                        readOnly
+                    />
+                </div>
+            </div>
+            <div className="row align-items-center mb-2">
+                <label htmlFor="broker-message" className="col-3 text-end">Message:</label>
+                <div className="col-9">
+                    <input
+                        id="broker-message"
+                        type="text"
+                        value={brokerStatus.statusMessage}
+                        className="form-control"
+                        readOnly
+                    />
+                </div>
+            </div>
+            <div className="row align-items-center mb-2">
+                <label htmlFor="broker-last-status" className="col-3 text-end">Last Status:</label>
+                <div className="col-9">
+                    <input
+                        id="broker-last-status"
+                        type="text"
+                        value={brokerStatus.statusTime ? `${brokerStatus.statusTime.getMonth()+1}/${brokerStatus.statusTime.getDate()}/${brokerStatus.statusTime.getFullYear()} ${brokerStatus.statusTime.getHours()}:${brokerStatus.statusTime.getMinutes()}:${brokerStatus.statusTime.getSeconds()}` : ''}
+                        className="form-control"
+                        readOnly
+                    />
+                </div>
+            </div>
+            <div className="row mt-2 gap-4 justify-content-center">
+                <button className="col-5" type="submit">Connect</button>
+                <button className="col-5 button-danger" type="button" onClick={disconnect}>Disconnect</button>
+            </div>
         </form>
     );
 }
-
-export default Broker;

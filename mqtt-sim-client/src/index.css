@@ -1,28 +1,30 @@
 :root,
 [data-bs-theme="light"] {
-  --bs-primary: #5a6a8a;
-  --bs-primary-rgb: 90, 106, 138;
-  --bs-primary-bg-subtle: #f4f4f8;
-  --bs-body-bg: #ecedef; 
-  --bs-body-secondary: #f8f9fb;
-  --bs-body-color: #23232a; 
-  --bs-border-color: #bfc2cc;
-  --bs-button-primary: #6c7bbd;
-  --bs-button-primary-hover: #7481be;
-  --bs-button-primary-active: #7c89bf;
+  --bs-primary: #007acc;
+  --bs-primary-rgb: 0, 122, 204;
+  --bs-primary-bg-subtle: #f3f6fb;
+  --bs-body-bg: #f3f6fb;
+  --bs-body-secondary: #e7eaf3;
+  --bs-body-color: #1e1e1e;
+  --bs-body-color: #1e1e1e;
+  --bs-border-color: #d4dbe5;
+  --bs-button-primary: #007acc;
+  --bs-button-primary-hover: #005fa3;
+  --bs-button-primary-active: #00497a;
 }
 
 [data-bs-theme="dark"] {
-  --bs-primary: #5a6a8a;
-  --bs-primary-rgb: 90, 106, 138;
-  --bs-primary-bg-subtle: #222228;
-  --bs-body-bg: #181820;
-  --bs-body-secondary: #21212c;
-  --bs-body-color: #e0e0e0;
-  --bs-border-color: #44444a;
-  --bs-button-primary: #5a6a8a;
-  --bs-button-primary-hover: #6c7bbd;
-  --bs-button-primary-active: #7481be;
+  --bs-primary: #3794ff;
+  --bs-primary-rgb: 55, 148, 255;
+  --bs-primary-bg-subtle: #1e1e1e;
+  --bs-body-bg: #1e1e1e;
+  --bs-body-secondary: #23272e;
+  --bs-body-color: #d4d4d4;
+  --bs-text-color: #d4d4d4;
+  --bs-border-color: #2c2c32;
+  --bs-button-primary: #3794ff;
+  --bs-button-primary-hover: #2878c6;
+  --bs-button-primary-active: #185a9d;
 }
 
 html, body, #root {
@@ -44,11 +46,11 @@ html, body, #root {
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--bs-primary);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--bs-button-primary-hover);
 }
 
 body {
@@ -66,16 +68,15 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid var(--bs-border-color);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
   background-color: var(--bs-button-primary);
-  color: #fff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 button:hover {
   background-color: var(--bs-button-primary-hover);
@@ -87,4 +88,13 @@ button:focus-visible {
 
 button:active {
   background-color: var(--bs-button-primary-active);
+}
+
+.button-danger {
+  background: rgb(255, 45, 45);
+  color: white;
+  border: 1px solid rgb(255, 45, 45);
+}
+.button-danger:hover {
+  background-color: rgb(163, 2, 2);
 }

@@ -3,10 +3,11 @@ import TopicDefinition from "../models/TopicDefinition";
 import styles from "./Topic.module.css";
 import dropdownArrow from "../assets/dropdown-arrow.svg";
 import dropdownArrowDown from "../assets/dropdown-arrow-down.svg";
+import TopicProps from "../interfaces/TopicProps";
 
-function Topic(props: { topic: TopicDefinition; onSave: (t: TopicDefinition) => void; onDelete: (name: string) => void }) {
+export default function Topic({topicDefinition, onSave, onDelete}: TopicProps) {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [topic, setTopic] = useState<TopicDefinition>(new TopicDefinition(props.topic));
+    const [topic, setTopic] = useState<TopicDefinition>(new TopicDefinition(topicDefinition));
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -23,12 +24,12 @@ function Topic(props: { topic: TopicDefinition; onSave: (t: TopicDefinition) => 
             alert("Interval must be at least 50ms.");
             return;
         }
-        props.onSave(topic);
+        onSave(topic);
         setIsExpanded(false);
     };
 
     const handleDelete = () => {
-        props.onDelete(topic.name);
+        onDelete(topic.name);
     };
 
     return (
@@ -44,31 +45,29 @@ function Topic(props: { topic: TopicDefinition; onSave: (t: TopicDefinition) => 
                 </button>
             </div>
             {isExpanded && (
-                <form className="topic-details" onSubmit={handleSave}>
-                    <label className={styles.item}>
+                <form className="row mx-0 topic-details container-fluid" onSubmit={handleSave}>
+                    <label className="col mx-2 mb-1">
                         Maximum Value:
-                        <input type="number" className={styles.item} name="maximumValue" value={topic.maximumValue} onChange={handleChange} />
+                        <input type="number" className="mx-2 mb-2" name="maximumValue" value={topic.maximumValue} onChange={handleChange} />
                     </label>
-                    <label className={styles.item}>
+                    <label className="col mx-2 mb-1">
                         Minimum Value:
-                        <input type="number" className={styles.item} name="minimumValue" value={topic.minimumValue} onChange={handleChange} />
+                        <input type="number" className="mx-2 mb-2" name="minimumValue" value={topic.minimumValue} onChange={handleChange} />
                     </label>
-                    <label className={styles.item}>
+                    <label className="col mx-2 mb-1">
                         Interval (ms):
-                        <input type="number" className={styles.item} name="intervalMilliseconds" value={topic.intervalMilliseconds} onChange={handleChange} />
+                        <input type="number" className="mx-2 mb-2" name="intervalMilliseconds" value={topic.intervalMilliseconds} onChange={handleChange} />
                     </label>
-                    <label className={styles.item}>
-                        QoS:
-                        <input type="number" className={styles.item} name="qualityOfService" value={topic.qualityOfService} onChange={handleChange} />
+                    <label className="col mx-2 mb-1">
+                        Quality of Service:
+                        <input type="number" className="mx-2 mb-2" name="qualityOfService" value={topic.qualityOfService} onChange={handleChange} />
                     </label>
-                    <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
-                        <button className={styles.item} type="submit">Save</button>
-                        <button className={styles.item} type="button" style={{ background: 'transparent', color: 'red', border: '1px solid red' }} onClick={handleDelete}>Delete</button>
+                    <div className="row d-flex justify-content-end gap-3">
+                        <button className="col-md-2 col-lg-1" type="submit">Save</button>
+                        <button className="col-md-2 col-lg-1" type="button" style={{ background: 'transparent', color: 'red', border: '1px solid red' }} onClick={handleDelete}>Delete</button>
                     </div>
                 </form>
             )}
         </div>
     );
 }
-
-export default Topic;

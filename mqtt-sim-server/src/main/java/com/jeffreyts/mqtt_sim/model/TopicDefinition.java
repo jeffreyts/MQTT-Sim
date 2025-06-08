@@ -35,8 +35,7 @@ public class TopicDefinition {
        return this.maximumValue;
    }
 
-   public int getMinimumValue(){
-
+   public int getMinimumValue() {
        return this.minimumValue;
    }
 

@@ -6,7 +6,7 @@ import styles from "./TopicList.module.css";
 import playButton from '../assets/play-green.svg'
 import pauseButton from '../assets/pause-red.svg';
 
-const TopicList = () => {
+export default function TopicList(){
     const [topics, setTopics] = useState<TopicDefinition[]>([]);
     const [loading, setLoading] = useState(true);
     const [publishing, setPublishing] = useState(false);
@@ -80,7 +80,7 @@ const TopicList = () => {
 
     return (
         <div className={styles.topicListOuter}>
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+            <div className="d-flex gap-1 justify-content-end">
                 <button onClick={startPublishingTopics} className={`${styles.topicButton} ${publishing ? styles.playButtonPublishing : styles.playButton}`}>
                     <img src={playButton} alt="Start Publishing"/>
                 </button>
@@ -91,12 +91,10 @@ const TopicList = () => {
             </div>
             <div className={styles.topicListInner}>
                 {topics.map(t => (
-                    <Topic key={t.name} topic={t} onSave={handleSave} onDelete={handleDelete} />
+                    <Topic key={t.name} topicDefinition={t} onSave={handleSave} onDelete={handleDelete} />
                 ))}
             </div>
             
         </div>
     );
 }
-
-export default TopicList;

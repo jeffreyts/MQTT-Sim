@@ -4,7 +4,7 @@ import logo from '../assets/mqttsim.svg';
 import styles from './Header.module.css';
 import { RootState } from "../store/store";
 
-const Header = () => {
+export default function Header() {
     const dispatch = useDispatch();
     const theme = useSelector((state: RootState) => state.theme.value);
     let checked = theme === 'dark' ? true : false;
@@ -14,19 +14,13 @@ const Header = () => {
     };
     
     return (
-        <header className={`row ${styles.headerContainer}`}>
-            <div className="col-sm text-end">
+        <header className={`row justify-content-end ${styles.headerContainer}`}>
+            <div className="col-8 col-md-4 text-start d-flex gap-3 align-items-center d-flex justify-content-center">
                 <img src={logo} className={styles.logo} alt="mqtt-sim logo"/>
+                <div className={styles.headerText}>MQTT-Sim</div>
             </div>
-            <div className={`col-sm text-start ${styles.headerText}`}>MQTT-Sim</div>
-            <div className="col-md-2 align-items-center">
-                <div
-                    className="form-check form-switch"
-                    style={{ 
-                        '--bs-form-switch-width': '60px',
-                        '--bs-form-switch-height': '24px'
-                    } as React.CSSProperties}
-                >
+            <div className="col-2 col-md-4 text-start align-items-center d-flex justify-content-end px-5">
+                <div className="form-check form-switch">
                     <input
                         className="form-check-input"
                         type="checkbox"
@@ -45,5 +39,3 @@ const Header = () => {
         </header>
     )
 }
-
-export default Header;
