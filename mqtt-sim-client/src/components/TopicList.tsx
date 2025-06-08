@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { getTopics, removeTopic, addOrUpdateTopic, startPublishing, pausePublishing, getPublishingStatus } from "../services/apiService";
+import styles from './TopicList.module.css';
 import TopicDefinition from "../models/TopicDefinition";
 import Topic from "./Topic";
-import styles from "./TopicList.module.css";
-import playButton from '../assets/play-green.svg'
+import playButton from '../assets/play-green.svg';
 import pauseButton from '../assets/pause-red.svg';
 
 export default function TopicList(){
@@ -79,22 +79,27 @@ export default function TopicList(){
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div className={styles.topicListOuter}>
-            <div className="d-flex gap-1 justify-content-end">
-                <button onClick={startPublishingTopics} className={`${styles.topicButton} ${publishing ? styles.playButtonPublishing : styles.playButton}`}>
+        <div className="h-100 w-100 d-flex flex-column">
+            <div className="d-flex gap-2 justify-content-end my-2 me-4">
+                <button onClick={startPublishingTopics} 
+                    className={`btn btn-outline-success d-flex align-items-center justify-content-center ${publishing ? styles.playButtonPublishing : ''}`}
+                    style={{ width: 50, height: 30 }}>
                     <img src={playButton} alt="Start Publishing"/>
                 </button>
-                <button onClick={pausePublishingTopics} className={`${styles.topicButton} ${styles.pauseButton}`}>
+                <button onClick={pausePublishingTopics} 
+                    className="btn btn-outline-danger d-flex align-items-center justify-content-center"
+                    style={{ width: 50, height: 30 }}>
                     <img src={pauseButton} alt="Pause Publishing"/>
                 </button>
-                <button onClick={addTopic} className={styles.topicButton}>Add</button>
+                <button onClick={addTopic}
+                style={{ width: 50, height: 30 }}
+                    className="btn btn-primary d-flex align-items-center justify-content-center">Add</button>
             </div>
-            <div className={styles.topicListInner}>
+            <div className="flex-grow-1 overflow-auto pe-1">
                 {topics.map(t => (
                     <Topic key={t.name} topicDefinition={t} onSave={handleSave} onDelete={handleDelete} />
                 ))}
             </div>
-            
         </div>
     );
 }

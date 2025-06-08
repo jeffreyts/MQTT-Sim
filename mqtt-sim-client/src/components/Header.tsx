@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setTheme } from "../store/themeSlice";
 import logo from '../assets/mqttsim.svg';
-import styles from './Header.module.css';
 import { RootState } from "../store/store";
 
 export default function Header() {
@@ -14,12 +13,12 @@ export default function Header() {
     };
     
     return (
-        <header className={`row justify-content-end ${styles.headerContainer}`}>
-            <div className="col-8 col-md-4 text-start d-flex gap-3 align-items-center d-flex justify-content-center">
-                <img src={logo} className={styles.logo} alt="mqtt-sim logo"/>
-                <div className={styles.headerText}>MQTT-Sim</div>
+        <header className="row justify-content-end bg-dark border-bottom border-1 text-body align-items-center m-0 px-0">
+            <div className="col-8 col-md-4 d-flex gap-3 align-items-center justify-content-center text-start">
+                <img src={logo} style={{width: 60, height: 'auto'}} alt="mqtt-sim logo"/>
+                <div className="fs-2 fw-bold fst-italic">MQTT-Sim</div>
             </div>
-            <div className="col-2 col-md-4 text-start align-items-center d-flex justify-content-end px-5">
+            <div className="col-2 col-md-4 d-flex align-items-center justify-content-end px-5">
                 <div className="form-check form-switch">
                     <input
                         className="form-check-input"

@@ -1,47 +1,5 @@
-/* Only the topic list scrolls, not the whole page */
-.topic-list {
-  max-height: 100vh;
-  overflow-y: auto;
-  padding-right: 8px; /* for scrollbar space */
-}
-
-/* Make TopicList fill available space and only it scrolls */
-.topicListOuter {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.topicListInner {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  min-height: 0;
-}
-
-.topicButton {
-  margin: 10px 0px 10px 0px;
-  align-self: right;
-  padding: 0px 10px 0px 10px;
-}
-
-.playButton {
-  background: transparent;
-  border-color: #27ae60;
-}
-.playButton:hover {
-  background: #67b588;
-}
-
 .playButtonPublishing {
   animation: flashColor 2s infinite;
-}
-
-.pauseButton {
-  background: transparent;
-  border-color: #e74c3c;
-}
-.pauseButton:hover {
-  background: #ec7062;
 }
 
 @keyframes flashColor {

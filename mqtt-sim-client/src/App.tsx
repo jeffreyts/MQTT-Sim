@@ -12,14 +12,16 @@ export default function App() {
   return (
     <>
       <Header/>
-      <div className="app-content-row">
-        <Sidebar activePanel={activePanel} setActivePanel={setActivePanel} />
+      <div className="d-flex flex-row flex-grow-1 min-vh-100 min-vw-100">
+        <div className="d-flex flex-column p-0">
+          <Sidebar activePanel={activePanel} setActivePanel={setActivePanel} />
+        </div>
         {activePanel === 'broker' && (
-          <div className="side-panel-container">
+          <div className="d-flex flex-column p-0 h-100 border-end border-secondary-subtle border-1">
             <Broker />
           </div>
         )}
-        <div className={activePanel === 'broker' ? "main-content-with-panel" : "main-content-full"}>
+        <div className="bg-body-tertiary d-flex flex-column flex-grow-1 p-0 h-100">
           <TopicList/>
         </div>
       </div>
