@@ -5,6 +5,8 @@ import Header from './components/Header'
 import TopicList from './components/TopicList'
 import Broker from './components/Broker'
 import Sidebar from './components/Sidebar'
+import TopicEditor from './components/TopicEditor';
+import { Resizable } from 're-resizable';
 
 export default function App() {
   const [activePanel, setActivePanel] = useState<'broker' | null>(null);
@@ -21,8 +23,18 @@ export default function App() {
             <Broker />
           </div>
         )}
+        <Resizable
+          defaultSize={{ width: 320, height: '100%' }}
+          minWidth={200}
+          maxWidth={600}
+          enable={{ right: true }}
+          style={{ overflow: 'auto', height: '100%' }}
+          className="border-end"
+        >
+          <TopicList />
+        </Resizable>
         <div className="bg-body-tertiary d-flex flex-column flex-grow-1 p-0 h-100">
-          <TopicList/>
+          <TopicEditor />
         </div>
       </div>
     </>

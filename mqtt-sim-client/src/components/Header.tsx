@@ -15,15 +15,15 @@ export default function Header() {
     const getThemeIcon = () => {
         switch (theme) {
             case 'dark':
-                return <i className="bi bi-sun-fill fs-4 m-1 text-warning" onClick={handleToggle}></i>;
+                return <i className="bi bi-moon-stars-fill fs-5 m-1 text-secondary" onClick={handleToggle} title="Switch to light mode"></i>;
             case 'light':
-                return <i className="bi bi-moon-stars-fill fs-4 m-1 text-secondary" onClick={handleToggle}></i>;
+                return <i className="bi bi-sun-fill fs-5 m-1 text-secondary" onClick={handleToggle} title="Switch to dark mode"></i>;
             default:
         }
     }
     
     return (
-        <header className="row justify-content-end bg-body border-bottom border-1 text-body align-items-center m-0 px-0">
+        <header className="row justify-content-end bg-body border-bottom border-2 text-body align-items-center m-0 px-0">
             <div className="col-8 col-md-4 d-flex gap-3 align-items-center justify-content-center text-start">
                 <img src="/mqttsim.svg" style={{width: 60, height: 'auto'}} alt="mqtt-sim logo"/>
                 <div className="fs-2 fw-bold fst-italic">MQTT-Sim</div>

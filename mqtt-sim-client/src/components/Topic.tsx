@@ -64,7 +64,7 @@ export default function Topic({topicDefinition, onSave, onDelete}: TopicProps) {
                     </label>
                     <div className="col-12 d-flex justify-content-end gap-2 mt-2">
                         <button className="btn btn-primary" type="submit">Save</button>
-                        <button className="btn btn-outline-danger" type="button" onClick={handleDelete}>Delete</button>
+                        <button className="btn btn-danger" type="button" onClick={handleDelete}>Delete</button>
                     </div>
                 </form>
             )}

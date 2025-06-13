@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import { getTopics, removeTopic, addOrUpdateTopic, startPublishing, pausePublishing, getPublishingStatus } from "../services/apiService";
+import { setSelectedTopic, resetSelectedTopic } from "../store/selectedTopicSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
 import styles from './TopicList.module.css';
 import TopicDefinition from "../models/TopicDefinition";
-import Topic from "./Topic";
 import playButton from '../assets/play-green.svg';
 import pauseButton from '../assets/pause-red.svg';
 
-export default function TopicList(){
+export default function TopicList() {
     const [topics, setTopics] = useState<TopicDefinition[]>([]);
     const [loading, setLoading] = useState(true);
     const [publishing, setPublishing] = useState(false);
+    const [editingValue, setEditingValue] = useState<string>("");
+    const selectedTopic = useSelector((state: RootState) => state.slice.value);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchTopics = async () => {
@@ -54,8 +59,13 @@ export default function TopicList(){
     };
 
     const addTopic = () => {
-        const newTopic = new TopicDefinition({ name: `NewTopic${topics.length + 1}`, maximumValue: 100, minimumValue: 0, intervalMilliseconds: 1000, qualityOfService: 1 });
+        const nextUid = topics.length > 0 ? Math.min(...topics.map(t => t.uid)) - 1 : -1;
+        const newTopic = new TopicDefinition({ name: `NewTopic${topics.length + 1}`, maximumValue: 100, minimumValue: 0, intervalMilliseconds: 1000, qualityOfService: 1, uid: nextUid });
         setTopics(topics => [newTopic, ...topics]);
+    }
+
+    const setTopic = (topic: TopicDefinition) => () => {
+        dispatch(setSelectedTopic(topic));
     }
 
     const startPublishingTopics = () => {
@@ -76,11 +86,35 @@ export default function TopicList(){
         setPublishing(false);
     }
 
+    const startEditing = (topic: TopicDefinition) => {
+        if (selectedTopic?.uid === topic.uid) {
+            setEditingValue(topic.name);
+        }
+    };
+    
+    const saveEdit = (topic: TopicDefinition) => {
+        if (editingValue.trim() && editingValue !== topic.name) {
+            const updatedTopic = { ...topic, name: editingValue };
+            handleSave(updatedTopic);
+            dispatch(setSelectedTopic(updatedTopic));
+        }
+        setEditingValue("");
+    };
+    
+
+    const handleEditKeyDown = (e: React.KeyboardEvent, topic: TopicDefinition) => {
+        if (e.key === "Enter") {
+            saveEdit(topic);
+        } else if (e.key === "Escape") {
+            setEditingValue("");
+        }
+    };
+
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div className="h-100 w-100 d-flex flex-column">
-            <div className="d-flex gap-2 justify-content-end my-2 me-4">
+        <div className="d-flex flex-column h-100">
+            <div className="row container-fluid gap-2 align-items-center justify-content-center mx-0 my-2 p-0">
                 <button onClick={startPublishingTopics} 
                     className={`btn btn-outline-success d-flex align-items-center justify-content-center ${publishing ? styles.playButtonPublishing : ''}`}
                     style={{ width: 50, height: 30 }}>
@@ -92,12 +126,47 @@ export default function TopicList(){
                     <img src={pauseButton} alt="Pause Publishing"/>
                 </button>
                 <button onClick={addTopic}
-                style={{ width: 50, height: 30 }}
-                    className="btn btn-primary d-flex align-items-center justify-content-center">Add</button>
+                    style={{ width: 50, height: 30 }}
+                    className="btn btn-secondary fw-bold fs-4 d-flex align-items-center justify-content-center">
+                    <i className="bi bi-plus"></i>
+                </button>
+                <button 
+                    style={{ width: 50, height: 30 }}
+                    className="btn btn-secondary d-flex align-items-center justify-content-center">
+                    <i className="bi bi-trash"></i>
+                </button>
             </div>
-            <div className="flex-grow-1 overflow-auto pe-1">
+            <div className="w-100 d-flex flex-column overflow-auto m-0 p-0">
                 {topics.map(t => (
-                    <Topic key={t.name} topicDefinition={t} onSave={handleSave} onDelete={handleDelete} />
+                    <div key={t.uid}>
+                        {selectedTopic?.uid === t.uid && editingValue !== "" ? (
+                            <input
+                                type="text"
+                                className="form-control form-control-sm"
+                                value={editingValue}
+                                autoFocus
+                                onChange={e => setEditingValue(e.target.value)}
+                                onBlur={() => saveEdit(t)}
+                                onKeyDown={e => handleEditKeyDown(e, t)}
+                                style={{ minHeight: '28px' }}
+                            />
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={setTopic(t)}
+                                onDoubleClick={() => startEditing(t)}
+                                className={`btn btn-sm text-start ${selectedTopic?.uid === t.uid ? 'bg-secondary' : 'bg-body'} border-top border-bottom rounded-0 w-100 d-flex justify-content-between`}
+                                style={{ minHeight: '28px' }}
+                            >
+                                {t.name}
+                                <i 
+                                    className="bi bi-pencil ms-auto" 
+                                    onClick={() => startEditing(t)} 
+                                ></i>
+                            </button>
+                        )}
+                        
+                    </div>
                 ))}
             </div>
         </div>
