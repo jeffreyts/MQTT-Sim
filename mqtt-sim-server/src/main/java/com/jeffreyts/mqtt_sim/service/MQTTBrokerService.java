@@ -191,6 +191,7 @@ public class MQTTBrokerService implements BrokerService {
                     return Mqtt5Publish.builder()
                             .topic(topicDefinition.getName())
                             .qos(topicDefinition.getQualityOfService())
+                            .retain(topicDefinition.getRetain())
                             .payload(String.valueOf(randomValue).getBytes())
                             .build();
                 });

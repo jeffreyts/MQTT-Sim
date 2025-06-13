@@ -23,6 +23,9 @@ public class TopicDefinition {
     /// QoS to use for publishing messages
     MqttQos qualityOfService;
 
+    /// Retain Messages
+    boolean retain;
+
    public Integer getUID(){
         return this.UID;
    }
@@ -47,6 +50,10 @@ public class TopicDefinition {
        return this.intervalMilliseconds;
    }
 
+   public boolean getRetain(){
+       return this.retain;
+   }
+
    public void setUID(Integer UID) { this.UID = UID; }
 
    public void setName(String name) {
@@ -67,6 +74,10 @@ public class TopicDefinition {
 
    public void setIntervalMilliseconds(int intervalMilliseconds){
        this.intervalMilliseconds = intervalMilliseconds;
+   }
+
+   public void setRetain(boolean retain){
+       this.retain = retain;
    }
 
 }
