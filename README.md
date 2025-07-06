@@ -1,61 +1,121 @@
-**Under Active Development**
-
 # MQTT-Sim
 
-MQTT-Sim is a simulator designed to periodically publish random numeric data to an MQTT broker to help simulate multiple sensor readings without physical devices.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Java](https://img.shields.io/badge/Java-21%2B-blue)](https://www.oracle.com/java/technologies/)
+[![React](https://img.shields.io/badge/React-19-blue)](https://reactjs.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.4-green)](https://spring.io/projects/spring-boot)
 
-# Simple To Use
-- Connect to a broker
-![image](https://github.com/user-attachments/assets/1abd7792-4270-45ad-8dd5-82ae04b626e3)
-- Add and Configure Topics to publish to
-![image](https://github.com/user-attachments/assets/bff7fafa-1794-4cb3-b31f-77062c849c2e)
-- Press the play button to begin publishing, pause to stop publishing
-- Toggle between dark and light mode
-![image](https://github.com/user-attachments/assets/039add3b-a068-43d2-b673-0cec813e7adb)
+MQTT-Sim is a powerful MQTT message simulator that enables you to create sophisticated IoT device simulations with customizable payloads and realistic data patterns. Perfect for testing and development of MQTT-based applications without requiring physical devices.
 
+## Key Features
 
+### Advanced Payload Generation
+- **Template-based Payloads**: Create custom JSON payloads using a simple templating system
+- **Randomize Data**: Randomize properties within the payload in a few different ways:
+  - **String - Categorical**: A string will be selected from a comma-delimted list
+  - **Number - Random**: Generate values within a specified range with custom precision
+  - **Number - Normally Distributed**: Simulate normally distributed numeric data
+  - **Boolean**: True/False randomization
+  - **Timestamps**: Automatic timestamp generation with customizable formats
 
-## Features
+### Topic Management
+- **Multiple Topics**: Define and manage multiple MQTT topics
+- **Flexible Publishing**: Configure publishing intervals per topic
+- **QoS Support**: Full support for MQTT Quality of Service levels (0-2)
+- **Retain Flag**: Option to set the retain flag for each topic
+- **Single Topic Publish**: Publish a single message to a topic
+- **Auto Publish**: Automatically publish messages to a topic at a specified interval
 
-- **Simulate Multiple Topics:** Define multiple topics, each with its own value range, interval, and QoS.
-- **Periodic Publishing:** Each topic publishes random values at a configurable interval.
-- **Broker Management:** Connect to/disconnect from any MQTT broker (supports MQTT 3 and 5).
-- **Web UI:** Modern React-based frontend for managing brokers and topics.
-- **REST API:** Spring Boot backend exposes endpoints for broker and topic management.
-- **Configurable QoS:** Choose the MQTT Quality of Service level for each topic.
-- **Light/Dark Theme:** Switchable UI themes.
+### Other Features
+- **Dark/Light Theme**: Easy on the eyes in any lighting condition
 
-## Architecture
+## Technical Stack
 
-- **Frontend:** React + TypeScript + Vite (located in `mqtt-sim-client/`)
-- **Backend:** Java Spring Boot (located in `mqtt-sim-server/`)
+### Frontend
+- **React 19** with TypeScript
+- **Redux Toolkit** for state management
+- **Bootstrap 5** with custom theming
+- **Vite** for fast development and building
+
+### Backend
+- **Spring Boot 3.4.4**
+- **H2 Database** (in-memory with file persistence)
+- **HiveMQ MQTT Client**
+- **Maven** for dependency management
 
 ## Getting Started
 
 ### Prerequisites
+- Node.js 18+ (LTS recommended)
+- Java 21+ (Temurin distribution recommended)
+- Maven 3.6.3+
 
-- Node.js (for the frontend)
-- Java 21+ and Maven (for the backend)
+### Installation
 
-### Running the Backend
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/mqtt-sim.git
+   cd MQTT-Sim
+   ```
 
-```sh
-cd mqtt-sim-server
-./mvnw spring-boot:run
-```
+2. Start the backend server:
+   ```bash
+   cd mqtt-sim-server
+   ./mvnw spring-boot:run
+   ```
+   The backend will start on `http://localhost:8080`
 
-The backend will start on port 8080.
+3. In a new terminal, start the frontend:
+   ```bash
+   cd mqtt-sim-client
+   npm install
+   npm run dev
+   ```
+   The frontend will be available at `http://localhost:3000`
 
-### Running the Frontend
+## Usage Guide
 
-```sh
+### 1. Connect to an MQTT Broker
+   - Click "Add Broker" in the sidebar
+   - Enter broker details (host, port, and credentials if required)
+   - Click "Connect" to establish the connection
+
+### 2. Create Topics
+   - Click "Add Topic"
+   - Configure the topic path and publishing options
+   - Set the desired QoS level (0-2) and retain flag
+
+### 3. Define Payload Structure
+   - Use the Payload Editor to create your message template
+   - Add properties with different data types
+   - Configure each property's behavior (ranges, probabilities, etc.)
+   - Use `{{propertyName}}` syntax in your template to insert values
+
+### 4. Start Publishing
+   - Toggle the play button to start/stop publishing
+   - Monitor published messages in real-time
+   - Adjust settings on the fly while publishing
+
+## Building for Production
+
+To create a production build:
+
+```bash
+# Build the frontend
 cd mqtt-sim-client
-npm install
-npm run dev
+npm run build
+
+# Build the backend
+cd ../mqtt-sim-server
+./mvnw clean package
 ```
 
-The frontend will start on port 3000.
+The production build will be available in the respective `target` and `dist` directories.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
