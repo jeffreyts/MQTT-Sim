@@ -11,12 +11,6 @@ public class TopicDefinition {
     /// Topic Name
     String name;
 
-    /// Maximum Value
-    int maximumValue;
-
-    /// Minimum Value
-    int minimumValue;
-
     /// Publishing interval in milliseconds
     int intervalMilliseconds;
 
@@ -26,58 +20,55 @@ public class TopicDefinition {
     /// Retain Messages
     boolean retain;
 
-   public Integer getUID(){
+    /// Auto Publish
+    boolean autoPublish;
+
+    /// Payload Definition
+    PayloadDefinition payloadDefinition;
+
+    public Integer getUID(){
         return this.UID;
    }
+    public void setUID(Integer UID) { this.UID = UID; }
 
-   public String getName(){
+    public String getName(){
        return this.name;
    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-   public int getMaximumValue(){
-       return this.maximumValue;
-   }
-
-   public int getMinimumValue() {
-       return this.minimumValue;
-   }
-
-   public MqttQos getQualityOfService(){
+    public MqttQos getQualityOfService(){
        return this.qualityOfService;
    }
+    public void setQualityOfService(MqttQos qualityOfService){
+        this.qualityOfService = qualityOfService;
+    }
 
-   public int getIntervalMilliseconds(){
+    public int getIntervalMilliseconds(){
        return this.intervalMilliseconds;
    }
+    public void setIntervalMilliseconds(int intervalMilliseconds){
+        this.intervalMilliseconds = intervalMilliseconds;
+    }
 
-   public boolean getRetain(){
+    public boolean getRetain(){
        return this.retain;
    }
+    public void setRetain(boolean retain){
+        this.retain = retain;
+    }
 
-   public void setUID(Integer UID) { this.UID = UID; }
 
-   public void setName(String name) {
-       this.name = name;
+    public boolean getAutoPublish(){
+       return this.autoPublish;
    }
+    public void setAutoPublish(boolean autoPublish) { this.autoPublish = autoPublish; }
 
-   public void setMaximumValue(int maximumValue){
-       this.maximumValue = maximumValue;
-   }
-
-   public void setMinimumValue(int minimumValue){
-       this.minimumValue = minimumValue;
-   }
-
-   public void setQualityOfService(MqttQos qualityOfService){
-       this.qualityOfService = qualityOfService;
-   }
-
-   public void setIntervalMilliseconds(int intervalMilliseconds){
-       this.intervalMilliseconds = intervalMilliseconds;
-   }
-
-   public void setRetain(boolean retain){
-       this.retain = retain;
-   }
-
+    public PayloadDefinition getPayloadDefinition() {
+        return this.payloadDefinition;
+    }
+    public void setPayloadDefinition(PayloadDefinition payloadDefinition) {
+        this.payloadDefinition = payloadDefinition;
+    }
 }

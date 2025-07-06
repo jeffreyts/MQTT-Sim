@@ -65,7 +65,12 @@ export async function addOrUpdateTopic(topic: TopicDefinition): Promise<void> {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(topic)
+        body: JSON.stringify(topic, (key, value) => {
+            if (value instanceof Map) {
+                return Object.fromEntries(value);
+            }
+            return value;
+        })
     });
 
     if (!response.ok) {
@@ -87,6 +92,24 @@ export async function removeTopic(topic: TopicDefinition): Promise<void> {
     }
 }
 
+export async function publishTopic(topic: TopicDefinition): Promise<void> {
+    const response = await fetch(`${API_URL}/publish`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(topic, (key, value) => {
+            if (value instanceof Map) {
+                return Object.fromEntries(value);
+            }
+            return value;
+        })
+    });
+    if (!response.ok) {
+        throw new Error("Failed to publish topic");
+    }
+}
+
 export async function getTopics(): Promise<TopicDefinition[]> {
     const response = await fetch(`${API_URL}/topics`);
 
@@ -95,7 +118,17 @@ export async function getTopics(): Promise<TopicDefinition[]> {
     }
 
     const data = await response.json();
-    return data.map((topic: any) => new TopicDefinition(topic));
+    return data.map((topic: any) => {
+        if (topic.payloadDefinition && Array.isArray(topic.payloadDefinition.properties)) {
+            topic.payloadDefinition.properties = topic.payloadDefinition.properties.map((prop: any) => {
+                if (prop.configuration && !(prop.configuration instanceof Map)) {
+                    prop.configuration = new Map(Object.entries(prop.configuration));
+                }
+                return prop;
+            });
+        }
+        return new TopicDefinition(topic);
+    });
 }
 
 export async function startPublishing(): Promise<void> {

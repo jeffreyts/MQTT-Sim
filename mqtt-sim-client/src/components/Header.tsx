@@ -10,7 +10,7 @@ export default function Header() {
     const handleToggle = () => {
         checked = !checked;
         dispatch(setTheme(checked ? "dark" : "light"));
-    };
+    }
 
     const getThemeIcon = () => {
         switch (theme) {
@@ -23,14 +23,14 @@ export default function Header() {
     }
     
     return (
-        <header className="row justify-content-end bg-body border-bottom border-2 text-body align-items-center m-0 px-0">
-            <div className="col-8 col-md-4 d-flex gap-3 align-items-center justify-content-center text-start">
-                <img src="/mqttsim.svg" style={{width: 60, height: 'auto'}} alt="mqtt-sim logo"/>
-                <div className="fs-2 fw-bold fst-italic">MQTT-Sim</div>
+        <header className="row justify-content-between bg-body border-bottom border-2 text-body align-items-center m-0 px-0">
+            <div className="col col-md-4 d-flex gap-1 align-items-center justify-content-start text-start">
+                <img src="/mqttsim.svg" style={{width: 40, height: 'auto', paddingTop: 1.5}} alt="mqtt-sim logo"/>
+                <h5 className="m-0 p-0 fw-bold">MQTT-Sim</h5>
             </div>
-            <div className="col-2 col-md-4 d-flex align-items-center justify-content-end px-5">
+            <div className="col col-md-4 d-flex align-items-center justify-content-end px-4">
                 {getThemeIcon()}
             </div>
         </header>
-    )
+    );
 }

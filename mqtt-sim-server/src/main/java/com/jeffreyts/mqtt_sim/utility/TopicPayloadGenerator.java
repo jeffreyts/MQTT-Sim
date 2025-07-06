@@ -1,6 +1,5 @@
-package com.jeffreyts.mqtt_sim.utilities;
+package com.jeffreyts.mqtt_sim.utility;
 
-import com.jeffreyts.mqtt_sim.model.PayloadDefinition;
 import com.jeffreyts.mqtt_sim.model.PayloadProperty;
 import com.jeffreyts.mqtt_sim.model.TopicDefinition;
 

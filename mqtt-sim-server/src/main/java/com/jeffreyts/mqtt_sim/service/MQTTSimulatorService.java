@@ -3,27 +3,32 @@ package com.jeffreyts.mqtt_sim.service;
 
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5RxClient;
+import com.hivemq.client.mqtt.mqtt5.*;
 import com.hivemq.client.mqtt.mqtt5.message.connect.connack.Mqtt5ConnAck;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
+import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5PublishResult;
+import com.jeffreyts.mqtt_sim.utility.TopicPayloadGenerator;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import org.springframework.stereotype.Service;
 import com.jeffreyts.mqtt_sim.model.*;
-
+import com.jeffreyts.mqtt_sim.repository.MQTTTopicRepository;
+import com.jeffreyts.mqtt_sim.repository.TopicRepository;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class MQTTBrokerService implements BrokerService {
+public class MQTTSimulatorService implements SimulatorService {
 
     Mqtt5RxClient currentClient;
     MQTTBrokerStatus brokerStatus = new MQTTBrokerStatus(ConnectionStatus.DISCONNECTED, "", LocalDateTime.now(), "");
     Map<Integer, Disposable> topicToPublishingSubscriptionMap = new HashMap<Integer, Disposable>();
-    Map<Integer, TopicDefinition> topicToDefinitionMap = new HashMap<Integer, TopicDefinition>();
-    ArrayList<TopicDefinition> topics = new ArrayList<>();
+    private final TopicRepository topicRepository = new MQTTTopicRepository();
     Boolean paused = true;
+
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MQTTSimulatorService.class);
 
     @Override
     /// Connects to a broker
@@ -33,7 +38,7 @@ public class MQTTBrokerService implements BrokerService {
         this.currentClient = Mqtt5Client.builder()
                 .identifier(UUID.randomUUID().toString())
                 .serverHost(mqttBroker.getHost())
-                .serverPort(1883)
+                .serverPort(mqttBroker.getPort())
                 .buildRx();
 
         this.brokerStatus.setHost(mqttBroker.getHost());
@@ -98,10 +103,30 @@ public class MQTTBrokerService implements BrokerService {
             return;
         }
 
-        for (TopicDefinition topic: this.topicToDefinitionMap.values()){
-            startPublishingToTopic(topic);
+        for (TopicDefinition topic: topicRepository.getAllTopics()){
+            if (topic.getAutoPublish()) {
+                startPublishingToTopic(topic);
+            }
         }
         this.paused = false;
+    }
+
+    @Override
+    /// Publishes a single topic
+    public void publishSingleTopic(TopicDefinition topicDefinition){
+        if (this.brokerStatus.getStatus() != ConnectionStatus.CONNECTED) {
+            return;
+        }
+
+        Object randomValue = TopicPayloadGenerator.GeneratePayload(topicDefinition);
+        Disposable result =
+                this.currentClient.publish(Flowable.just(Mqtt5Publish.builder()
+                        .topic(topicDefinition.getName())
+                        .qos(topicDefinition.getQualityOfService())
+                        .retain(topicDefinition.getRetain())
+                        .payload(String.valueOf(randomValue).getBytes())
+                        .build())).singleOrError().subscribe();
+        result.dispose();
     }
 
     @Override
@@ -130,39 +155,22 @@ public class MQTTBrokerService implements BrokerService {
         if (topicDefinition.getIntervalMilliseconds() < 50){
             topicDefinition.setIntervalMilliseconds(50); //Limit the rate messages can be published
         }
-
-        if (this.topicToDefinitionMap.containsKey(topicDefinition.getUID())){
-            if (!this.paused && this.topicToPublishingSubscriptionMap.containsKey(topicDefinition.getUID())){
-                this.topicToPublishingSubscriptionMap.get(topicDefinition.getUID()).dispose();
-                this.topicToPublishingSubscriptionMap.remove(topicDefinition.getUID());
-            }
-
-            this.topicToDefinitionMap.put(topicDefinition.getUID(), topicDefinition);
-
-            if (!this.paused){
-                startPublishingToTopic(topicDefinition);
-            }
-            return;
-        } else if (topicDefinition.getUID() <= 0) {
-            int newUID = 0;
-            if (!topicToDefinitionMap.isEmpty()){
-                newUID = Collections.max(topicToDefinitionMap.keySet()) + 1;
-            }
-
+        if (topicDefinition.getUID() <= 0) {
+            int newUID = topicRepository.getAllTopics().stream()
+                .mapToInt(TopicDefinition::getUID)
+                .max().orElse(0) + 1;
             topicDefinition.setUID(newUID);
-            this.topicToDefinitionMap.put(topicDefinition.getUID(), topicDefinition);
-
-            if (!this.paused){
-                startPublishingToTopic(topicDefinition);
-            }
         }
-
+        topicRepository.addOrUpdateTopic(topicDefinition);
+        if (!this.paused){
+            startPublishingToTopic(topicDefinition);
+        }
     }
 
     @Override
     /// Gets a list of topics
     public List<TopicDefinition> getTopics(){
-        return new ArrayList<TopicDefinition>(this.topicToDefinitionMap.values());
+        return topicRepository.getAllTopics();
     }
 
     @Override
@@ -173,21 +181,22 @@ public class MQTTBrokerService implements BrokerService {
                 this.topicToPublishingSubscriptionMap.get(topicDefinition.getUID()).dispose();
             }
             catch (Exception exception){
-                //TODO: Log here that the topic was already disposed
+                logger.warn("Topic UID {} was already disposed or could not be disposed: {}", topicDefinition.getUID(), exception.getMessage());
             }
             this.topicToPublishingSubscriptionMap.remove(topicDefinition.getUID());
         }
-
-        this.topicToDefinitionMap.remove(topicDefinition.getUID());
+        topicRepository.removeTopic(topicDefinition.getUID());
     }
 
     /// Begins publishing to a topic
     private void startPublishingToTopic(TopicDefinition topicDefinition){
+        if (!topicDefinition.getAutoPublish()) {
+            return;
+        }
+
         Flowable<Mqtt5Publish> messagesToPublish = Flowable.interval(topicDefinition.getIntervalMilliseconds(), TimeUnit.MILLISECONDS)
                 .map(i -> {
-                    double randomValue = ThreadLocalRandom.current().nextDouble(
-                            topicDefinition.getMinimumValue(), topicDefinition.getMaximumValue());
-
+                    Object randomValue = TopicPayloadGenerator.GeneratePayload(topicDefinition);
                     return Mqtt5Publish.builder()
                             .topic(topicDefinition.getName())
                             .qos(topicDefinition.getQualityOfService())

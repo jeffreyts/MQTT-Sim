@@ -1,4 +1,4 @@
 export default interface SidebarProps {
-    activePanel: 'broker' | null;
-    setActivePanel: (panel: 'broker' | null) => void;
+    activePanel: string | null;
+    setActivePanel: (panel: string | null) => void;
 }

@@ -18,22 +18,20 @@ public class MQTTBrokerStatus {
     public ConnectionStatus getStatus(){
         return this.status;
     }
-
-    public String getHost(){
-        return this.host;
-    }
-
-    public LocalDateTime dateTime(){
-        return this.statusTime;
-    }
-
     public void setStatus(ConnectionStatus connectionStatus){
         this.status = connectionStatus;
         this.statusTime = LocalDateTime.now();
     }
 
+    public String getHost(){
+        return this.host;
+    }
     public void setHost(String host){
         this.host = host;
+    }
+
+    public LocalDateTime getStatusTime(){
+        return this.statusTime;
     }
 
     public void setStatusMessage(String statusMessage){
