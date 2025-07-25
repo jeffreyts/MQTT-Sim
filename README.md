@@ -20,7 +20,7 @@ MQTT-Sim is a powerful MQTT message simulator designed to help you create and au
   - **Number - Random**: Generate values within a specified range with custom precision
   - **Number - Normally Distributed**: Simulate normally distributed numeric data
   - **Boolean**: True/False randomization
-  - **Timestamps**: Automatic timestamp generation with customizable formats
+  - **Timestamp**: Automatic timestamp generation with customizable formats
 
 ### Topic Management
 - **Multiple Topics**: Define and manage multiple MQTT topics
@@ -29,9 +29,6 @@ MQTT-Sim is a powerful MQTT message simulator designed to help you create and au
 - **Retain Flag**: Option to set the retain flag for each topic
 - **Single Topic Publish**: Publish a single message to a topic
 - **Auto Publish**: Automatically publish messages to a topic at a specified interval
-
-### Other Features
-- **Dark/Light Theme**: Easy on the eyes in any lighting condition
 
 ## Technical Stack
 
