@@ -5,7 +5,11 @@
 [![React](https://img.shields.io/badge/React-19-blue)](https://reactjs.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.4-green)](https://spring.io/projects/spring-boot)
 
-MQTT-Sim is a powerful MQTT message simulator that enables you to create sophisticated IoT device simulations with customizable payloads and realistic data patterns. Perfect for testing and development of MQTT-based applications without requiring physical devices.
+## Overview
+MQTT-Sim is a powerful MQTT message simulator designed to help you create and automatically publish custom and dynamic paylods for many topics simultaneously. The payload editor allows you to fully customize messages, including the ability to define properties, which are dynamic values that can be randomized with each publish to closely mimic real-world applications (see options below). You can fine-tune the randomization settings for realistic simulations. Payloads can be published manually, at fixed intervals, or using both methods in combination.
+
+![image](https://github.com/user-attachments/assets/f2fd1b90-8086-4510-85e8-2695bb2359bf)
+![image](https://github.com/user-attachments/assets/ce063bba-8c17-4bd6-8706-8091dfa3ee63)
 
 ## Key Features
 
@@ -16,7 +20,7 @@ MQTT-Sim is a powerful MQTT message simulator that enables you to create sophist
   - **Number - Random**: Generate values within a specified range with custom precision
   - **Number - Normally Distributed**: Simulate normally distributed numeric data
   - **Boolean**: True/False randomization
-  - **Timestamps**: Automatic timestamp generation with customizable formats
+  - **Timestamp**: Automatic timestamp generation with customizable formats
 
 ### Topic Management
 - **Multiple Topics**: Define and manage multiple MQTT topics
@@ -25,9 +29,6 @@ MQTT-Sim is a powerful MQTT message simulator that enables you to create sophist
 - **Retain Flag**: Option to set the retain flag for each topic
 - **Single Topic Publish**: Publish a single message to a topic
 - **Auto Publish**: Automatically publish messages to a topic at a specified interval
-
-### Other Features
-- **Dark/Light Theme**: Easy on the eyes in any lighting condition
 
 ## Technical Stack
 
