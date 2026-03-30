@@ -11,7 +11,6 @@
 	<groupId>com.jeffreyts</groupId>
 	<artifactId>mqtt-sim</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<host>mqtt-sim</host>
 	<description>MQTT Simulator</description>
 	<url/>
 	<licenses>

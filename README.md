@@ -73,6 +73,35 @@ MQTT-Sim is a powerful MQTT message simulator that enables you to create sophist
    ```
    The frontend will be available at `http://localhost:3000`
 
+## Docker Deployment (Unified Image)
+
+You can now build and run the entire application (backend + frontend) as a single Docker image.
+
+### Prerequisites
+- [Docker](https://www.docker.com/get-started)
+
+### Quick Start
+
+1. Build the Docker image (from the project root):
+   ```sh
+   docker build -f mqtt-sim-server/Dockerfile -t yourusername/mqtt-sim:latest .
+   ```
+
+2. Run the container:
+   ```sh
+   docker run -p 8080:8080 yourusername/mqtt-sim:latest
+   ```
+
+3. Access the application:
+   - Frontend & API: [http://localhost:8080](http://localhost:8080)
+
+### Stopping the Service
+
+To stop the container, press `Ctrl+C` or run:
+```sh
+docker stop <container_id>
+```
+
 ## Usage Guide
 
 ### 1. Connect to an MQTT Broker

@@ -65,7 +65,7 @@ export async function addOrUpdateTopic(topic: TopicDefinition): Promise<void> {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(topic, (key, value) => {
+        body: JSON.stringify(topic, (_, value) => {
             if (value instanceof Map) {
                 return Object.fromEntries(value);
             }
@@ -98,7 +98,7 @@ export async function publishTopic(topic: TopicDefinition): Promise<void> {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(topic, (key, value) => {
+        body: JSON.stringify(topic, (_, value) => {
             if (value instanceof Map) {
                 return Object.fromEntries(value);
             }
